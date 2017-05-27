@@ -1,21 +1,39 @@
+## NOT ALIASES
+# Obviously these are not aliases
+# They are auto shit
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
+fi
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi
+
+#eval $(keychain --eval --quiet id_ed25519 id_rsa ~/.keys/my_custom_key)
+
 ##UTILITY
 #alias ll='ls -la'
 alias q='exit'
 alias ropg='ROPgadget'
-alias gdb='gdb -q'
+#alias gdb='gdb -q'
 alias xcore='gdb -q -batch -c $1'
+alias pip-upgrade-all='pip freeze --local | grep -v "^\-e" | cut -d = -f 1  | sudo xargs -n1 pip install -U'
+alias pip2-upgrade-all='pip2 freeze --local | grep -v "^\-e" | cut -d = -f 1  | sudo xargs -n1 pip2 install -U'
 
 ##Directories
 alias github='cd ~/Documents/Github'
 alias writeups='cd ~/Documents/Github/writeups'
-alias uuu='sudo apt-get update && sudo apt-get upgrade -fy && sudo apt-get dist-upgrade -fy'
+alias uuu='pacman -Syu'
 alias la='ls -la'
 
 ##Random testing
 alias testcmd='echo $1'
-alias evince='evince $@ &'
+alias evince='evince $@ &-'
 
 #Android
 alias adb='/home/nullp0inter/Android/Sdk/platform-tools/adb'
 alias and_objdump='/home/nullp0inter/Documents/Github/android/android-ndk-r13/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/arm-linux-androideabi/bin/objdump'
 alias avd='/home/nullp0inter/Android/Sdk/tools/android avd'
+
+# VPN
+# PIA
+alias piavpn-fl='sudo openvpn --config /etc/openvpn/client/US_Florida.conf'

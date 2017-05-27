@@ -121,3 +121,4 @@ if [ -f ~/.aliases ]; then
 fi
 
 export PYTHONPATH=$PYTHONPATH:/home/nullp0inter/Documents/CTFTools/binja/binaryninja/python
+eval $(ssh-agent);
