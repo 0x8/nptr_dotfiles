@@ -126,6 +126,28 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-msg exit"
 
+# System operations
+mode "system" {
+    # These bingings trigger as soon as you enter the system mode
+    
+    # (Shift + p)       -   Power down
+    # (Shift + r)       -   Reboot
+    # (Shift + s)       -   Suspend
+    # (Shift + l)       -   Lock
+    
+    bindsym Shift+l exec --no-startup-id i3exit lock, mode "default"
+    bindsym Shift+s exec --no-startup-id i3exit suspend, mode "default"
+    bindsym Shift+r exec --no-startup-id i3exit reboot, mode "default"
+    bindsym Shift+p exec --no-startup-id i3exit shutdown, mode "default"
+    bindsym l exec --no-startup-id i3exit logout, mode "default"
+
+    # Return to standard mode
+    bindsym Escape mode "default"
+}
+
+# Enter power mode
+bindsym $mod+Shift+p mode "system"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -160,6 +182,25 @@ bar {
         status_command i3status
 	separator_symbol ":|:"
 }
+
+# Multimedia keys
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Touchpad controls
+bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
 exec --no-startup-id feh --bg-scale /home/nullp0inter/Documents/Wallpapers/ghost-red-church-bg.jpg
 
