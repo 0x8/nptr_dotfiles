@@ -92,5 +92,13 @@ source $HOME/.aliases
 export WINEDBG=-all
 
 source $HOME/.envvars
-eval $(ssh-agent)
-clear
+
+# A more elegant solution to ensure that ssh-agent is running
+# and only one instance at a time
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent
+fi
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval "$(<~/.ssh-agent)"
+fi
+
