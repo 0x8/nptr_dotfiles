@@ -102,5 +102,15 @@ if [[ "$SSH_AGENT_PID" == "" ]]; then
     eval "$(<~/.ssh-agent > /dev/null)"
 fi
 
+# Source virtualenv
+if [ -f /usr/bin/virtualenvwrapper.sh ]
+then
+    source /usr/bin/virtualenvwrapper.sh
+fi
+
+export PYTHONSTARTUP=~/.pythonrc
+
 clear
 clear
+
+
