@@ -40,6 +40,7 @@ set expandtab                   " Expand tabs into spaces
 set shiftround                  " use multiple of shiftwidth when indenting with '<' and '>'
 
 set number                      " always show line numbers
+set relativenumber              " combined with set number set hybrid-relative-number mode
 set showmatch                   " set show matching parenthesis
 set ignorecase                  " ignore case when searching
 set smartcase                   " ignore case if search pattern is all lowercase,
