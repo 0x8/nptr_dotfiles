@@ -6,8 +6,8 @@
 ######################################################
 
 # GLOBAL Reference to self (needed when linking)
-path_to_self="$(readlink -f $0)"
-
+path_to_script="$(readlink -f $0)"
+path_to_self=$"$(dirname "$path_to_script")"
 
 #############################################
 ## Check for and backup existing config items
