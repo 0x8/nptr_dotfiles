@@ -65,6 +65,17 @@ link_rc_file () {
         link_loc="$HOME""/.config/i3/config"
     elif [[ "$(basename $1)" == "i3status" ]]
     then
+        # Check that .config/i3status/ exists and
+        # create it if not. This is because for some
+        # reason or another, it tends to not be a
+        # default folder but i3status looks here for
+        # userspace extensions
+        if [ ! -d "$HOME/.config/i3status" ]
+        then
+            mkdir -p "$HOME/.config/i3status" 
+        fi
+        
+        # Set the link location
         link_loc="$HOME""/.config/i3status/config"
     else
         link_loc="$HOME""/""$1"
@@ -102,5 +113,5 @@ cp "$path_to_self""/vwbg.jpg" "$HOME""/Downloads/vwbg.jpg"
 echo "Copying i3exit into /usr/bin ... "
 echo "This will require sudo access"
 echo "Please review the script if you do not trust this operation"
-echo "You are looking for line 107"
+echo "You are looking for line 117"
 sudo cp "$path_to_self/i3exit" /usr/bin/i3exit
