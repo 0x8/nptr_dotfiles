@@ -209,8 +209,7 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-exec --no-startup-id feh --bg-scale /home/nullp0inter/Documents/Wallpapers/ghost-red-church-bg.jpg
-
+exec --no-startup-id feh --bg-scale $HOME/Downloads/vwbg.jpg
 # Lock with $mod+L
 bindsym $mod+l exec --no-startup-id i3lock -i /home/nullp0inter/Documents/Wallpapers/ghost-ethereal-papa-lock.png -c 000000
 
