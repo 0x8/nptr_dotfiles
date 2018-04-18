@@ -94,6 +94,7 @@ link_rc_file .bashrc
 link_rc_file .envvars
 link_rc_file .fehbg
 link_rc_file i3config
+link_rc_file i3status
 link_rc_file .pythonrc
 link_rc_file .tmux.conf
 link_rc_file .vimrc
@@ -114,5 +115,5 @@ cp "$path_to_self""/vwbg.jpg" "$HOME""/Downloads/vwbg.jpg"
 echo "Copying i3exit into /usr/bin ... "
 echo "This will require sudo access"
 echo "Please review the script if you do not trust this operation"
-echo "You are looking for line 118"
+echo "You are looking for line 119"
 sudo cp "$path_to_self/i3exit" /usr/bin/i3exit
