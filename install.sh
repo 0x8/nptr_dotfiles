@@ -64,6 +64,7 @@ link_rc_file () {
     then
         link_loc="$HOME""/.config/i3/config"
     elif [[ "$(basename $1)" == "i3status" ]]
+    then
         link_loc="$HOME""/.config/i3status/config"
     else
         link_loc="$HOME""/""$1"
