@@ -45,11 +45,11 @@ backup_rc_file $HOME/.bashrc
 backup_rc_file $HOME/.envvars
 backup_rc_file $HOME/.fehbg
 backup_rc_file $HOME/.config/i3/config
+backup_rc_file $HOME/.config/i3status/config
 backup_rc_file $HOME/.pythonrc
 backup_rc_file $HOME/.tmux.conf
 backup_rc_file $HOME/.vimrc
 backup_rc_file $HOME/.zshrc
-
 
 # Given the name of a dotfile provided by this repo,
 # create a symlink to it in the appropriate place
@@ -57,16 +57,14 @@ link_rc_file () {
     
     # Define the full path to the referenced dotfile
     new_rc_file="$path_to_self""/""$1"
-
-    # Almost all files can simply be placed at the
-    # $HOME base however for i3's configuration file
-    # (i3config in this repo), the actual location
-    # is in $HOME/.config/i3/config. This means we
-    # must explicitly check for it and rename it
-    # appropriately.
+    
+    # Check for i3config and i3status as they are
+    # treated differently than the other config files
     if [[ "$(basename $1)" == "i3config" ]]
     then
         link_loc="$HOME""/.config/i3/config"
+    elif [[ "$(basename $1)" == "i3status" ]]
+        link_loc="$HOME""/.config/i3status/config"
     else
         link_loc="$HOME""/""$1"
     fi
