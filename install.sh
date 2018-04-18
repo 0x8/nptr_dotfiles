@@ -30,6 +30,7 @@ backup_rc_file () {
     backup_location="$HOME""/.rc_file_backups/""$filename"
     if [ -f "$1" ]
     then
+        echo "[INFO] Backing up $1 to $backup_location"
         mv "$1" "$backup_location"
     fi
 }
@@ -84,6 +85,7 @@ link_rc_file () {
 
     # Generate the symlink
     # (ln -s TARGET LINK_NAME)
+    echo "[INFO] Linking $link_loc to $new_rc_file"
     ln -s $new_rc_file $link_loc
 }
 
