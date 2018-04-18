@@ -72,6 +72,7 @@ link_rc_file () {
         # userspace extensions
         if [ ! -d "$HOME/.config/i3status" ]
         then
+            echo "Creating i3status config folder ... "
             mkdir -p "$HOME/.config/i3status" 
         fi
         
@@ -113,5 +114,5 @@ cp "$path_to_self""/vwbg.jpg" "$HOME""/Downloads/vwbg.jpg"
 echo "Copying i3exit into /usr/bin ... "
 echo "This will require sudo access"
 echo "Please review the script if you do not trust this operation"
-echo "You are looking for line 117"
+echo "You are looking for line 118"
 sudo cp "$path_to_self/i3exit" /usr/bin/i3exit
