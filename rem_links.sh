@@ -15,6 +15,7 @@ check_and_del_link .bashrc
 check_and_del_link .envvars
 check_and_del_link .fehbg
 check_and_del_link .config/i3/config
+check_and_del_link .config/i3status/config
 check_and_del_link .pythonrc
 check_and_del_link .tmux.conf
 check_and_del_link .vimrc
