@@ -44,7 +44,6 @@ echo "$HOME""/.rc_file_backups"
 backup_rc_file $HOME/.aliases
 backup_rc_file $HOME/.bashrc
 backup_rc_file $HOME/.envvars
-backup_rc_file $HOME/.fehbg
 backup_rc_file $HOME/.config/i3/config
 backup_rc_file $HOME/.config/i3status/config
 backup_rc_file $HOME/.pythonrc
@@ -94,7 +93,6 @@ echo "Creating links to dotfiles ... "
 link_rc_file .aliases
 link_rc_file .bashrc
 link_rc_file .envvars
-link_rc_file .fehbg
 link_rc_file i3config
 link_rc_file i3status
 link_rc_file .pythonrc

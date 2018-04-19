@@ -13,7 +13,6 @@ check_and_del_link () {
 check_and_del_link .aliases
 check_and_del_link .bashrc
 check_and_del_link .envvars
-check_and_del_link .fehbg
 check_and_del_link .config/i3/config
 check_and_del_link .config/i3status/config
 check_and_del_link .pythonrc
