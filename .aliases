@@ -28,7 +28,6 @@ alias la='ls -la'
 
 ##Random testing
 alias testcmd='echo $1'
-alias evince='evince $@ &-'
 
 #Android
 alias adb='/home/nullp0inter/Android/Sdk/platform-tools/adb'
