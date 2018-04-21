@@ -112,8 +112,8 @@ fi
 cp "$path_to_self""/vwbg.jpg" "$HOME""/Downloads/vwbg.jpg"
 
 # "Install" i3exit by copying the executable script into /usr/bin
-echo "Copying i3exit into /usr/bin ... "
+echo "Linking i3exit into /usr/bin ... "
 echo "This will require sudo access"
 echo "Please review the script if you do not trust this operation"
-echo "You are looking for line 121"
-sudo cp "$path_to_self/i3exit" /usr/bin/i3exit
+echo "You are looking for line 119"
+sudo ln -s "$path_to_self/i3exit" /usr/bin/i3exit
