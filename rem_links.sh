@@ -19,3 +19,11 @@ check_and_del_link .pythonrc
 check_and_del_link .tmux.conf
 check_and_del_link .vimrc
 check_and_del_link .zshrc
+
+# Seperately check for i3exit script as it is
+# in /usr/bin and requires sudo
+if [ -h /usr/bin/i3exit ]
+then
+    sudo rm /usr/bin/i3exit
+fi
+
