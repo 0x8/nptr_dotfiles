@@ -117,3 +117,22 @@ echo "This will require sudo access"
 echo "Please review the script if you do not trust this operation"
 echo "You are looking for line 119"
 sudo ln -s "$path_to_self/i3exit" /usr/bin/i3exit
+
+# Fix up .tmux.conf POWERLINELOC
+powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
+if [ ! -z "$powerlineloc" ]
+then
+    # powerlineloc initially simply evaluates whether or not powerline-status
+    # is installed via pip, but won't point to the actual location. If the
+    # var is non-empty we know it exists and can fill in the rest of the path
+    powerlineloc=$powerlineloc/powerline/bindings/tmux/powerline.conf
+	sed -i "s/POWERLINELOC/$powerlineloc/g" $HOME/.tmux.conf
+else
+    # If we failed to find powerline, we need to disable the powerline shell 
+    # command and comment out the pointer to powerline so we don't get errors
+    # on tmux start
+    sed -i "s/run-shell/#run-shell/g"
+    sed -i "s/source POWERLINELOC/#source POWERLINELOC/g" $HOME/.tmux.conf
+fi
+
+
