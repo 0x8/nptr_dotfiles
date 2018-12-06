@@ -103,14 +103,10 @@ if [[ "$SSH_AGENT_PID" == "" ]]; then
 fi
 
 # Source virtualenv
-if [ -f /usr/bin/virtualenvwrapper.sh ]
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]
 then
-    source /usr/bin/virtualenvwrapper.sh
+    source /usr/local/bin/virtualenvwrapper.sh
 fi
 
 export PYTHONSTARTUP=~/.pythonrc
-
-clear
-clear
-
 
