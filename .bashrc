@@ -120,8 +120,6 @@ if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
 
-export PYTHONPATH=$PYTHONPATH:/home/nullp0inter/Documents/CTFTools/binja/binaryninja/python
-
 # An elegant solution to ensure that ssh-agent is running and
 # that there is only one instance at a time
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
@@ -130,3 +128,4 @@ fi
 if [[ "$SSH_AGENT_PID" == "" ]]; then
     eval "$(<~/.ssh-agent)"
 fi
+
