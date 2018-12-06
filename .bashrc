@@ -129,3 +129,10 @@ if [[ "$SSH_AGENT_PID" == "" ]]; then
     eval "$(<~/.ssh-agent)"
 fi
 
+# Enable python virtualenvwrapper if present
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]
+then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+
