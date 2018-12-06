@@ -62,6 +62,13 @@ link_rc_file () {
     # treated differently than the other config files
     if [[ "$(basename $1)" == "i3config" ]]
     then
+        # Check that i3's config file exists at $HOME/.config/i3
+        # in the event that the dotfiles are installed prior to i3.
+        # This should prevent the need to manually update the file later.
+        if [ ! -d $HOME/.config/i3 ]
+        then
+            mkdir -p $HOME/.config/i3
+        fi
         link_loc="$HOME""/.config/i3/config"
     elif [[ "$(basename $1)" == "i3status" ]]
     then
