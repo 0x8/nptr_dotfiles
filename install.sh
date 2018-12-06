@@ -131,7 +131,7 @@ else
     # If we failed to find powerline, we need to disable the powerline shell 
     # command and comment out the pointer to powerline so we don't get errors
     # on tmux start
-    sed -i "s/run-shell/#run-shell/g"
+    sed -i "s/run-shell/#run-shell/g" $HOME/.tmux.conf
     sed -i "s/source POWERLINELOC/#source POWERLINELOC/g" $HOME/.tmux.conf
 fi
 
