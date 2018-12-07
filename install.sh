@@ -50,6 +50,7 @@ backup_rc_file $HOME/.pythonrc
 backup_rc_file $HOME/.tmux.conf
 backup_rc_file $HOME/.vimrc
 backup_rc_file $HOME/.zshrc
+backup_rc_file $HOME/.config/terminator/config
 
 # Given the name of a dotfile provided by this repo,
 # create a symlink to it in the appropriate place
@@ -58,7 +59,7 @@ link_rc_file () {
     # Define the full path to the referenced dotfile
     new_rc_file="$path_to_self""/""$1"
     
-    # Check for i3config and i3status as they are
+    # Check for terminator, i3config, and i3status as they are
     # treated differently than the other config files
     if [[ "$(basename $1)" == "i3config" ]]
     then
@@ -85,6 +86,17 @@ link_rc_file () {
         
         # Set the link location
         link_loc="$HOME""/.config/i3status/config"
+    elif [[ "$(basename $1)" == "terminator_config" ]]
+    then
+        # like i3_config, terminator_config exists within a subfolder
+        # of .config, $HOME/.config/terminator/ as the file "config".
+        # overall it works the same as i3_config so this is just an
+        # adaptation of that
+        if [ !-d $HOME/.config/terminator ]
+        then
+            mkdir -p $HOME/.config/terminator
+        fi
+        link_loc="$HOME""/.config/terminator/config"
     else
         link_loc="$HOME""/""$1"
     fi
@@ -106,6 +118,7 @@ link_rc_file .pythonrc
 link_rc_file .tmux.conf
 link_rc_file .vimrc
 link_rc_file .zshrc
+link_rc_file terminator_config
 
 # Copy the vmbg.jpg file to the Downloads folder.
 # This shouldn't cause an issue but we will check
