@@ -92,7 +92,7 @@ link_rc_file () {
         # of .config, $HOME/.config/terminator/ as the file "config".
         # overall it works the same as i3_config so this is just an
         # adaptation of that
-        if [ !-d $HOME/.config/terminator ]
+        if [ ! -d $HOME/.config/terminator ]
         then
             mkdir -p $HOME/.config/terminator
         fi
