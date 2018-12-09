@@ -46,6 +46,7 @@ then
     mv "$HOME/.backgrounds" "$BACKUP_LOCATION/.backgrounds"
 
 elif [ -h "$HOME/.backgrounds" ]
+then
     # Remove existing link
     rm "$HOME/.backgrounds"
 fi
@@ -93,6 +94,7 @@ do
         sudo cp "$dest" "$BACKUP_LOCATION/binaries"
 
     elif [ -h "$dest" ]
+    then
         sudo rm "$dest"
     fi
     sudo ln -s $path_to_self/binaries/$binary /usr/local/bin/$binary
