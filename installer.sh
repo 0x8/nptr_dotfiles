@@ -1,4 +1,4 @@
-#!/usr/bin/env bash:w
+#!/usr/bin/env bash
 
 # @Ian Guibas
 # A simple installer for my dotfiles as symlinks. This installer attmepts to
