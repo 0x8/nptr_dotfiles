@@ -1,48 +1,100 @@
 #!/usr/bin/env bash:w
 
 # @Ian Guibas
-# This is a new custom installer for my dotfiles found here.
-# It is made with a non-destructive nature in mind while allowing
-# easy updates via git pull.
+# A simple installer for my dotfiles as symlinks. This installer attmepts to
+# preserve all exisitng, non-symlinked config files and directories but it is
+# far from perfect.
 
-# Specify where  existing files should be backed up to when possible
-# and ensure the location exists.
-BACKUP_LOCATION=$HOME/.rc_backups
-if [ ! -d $BACKUP_LOCATION ]
+# User-defineable rc file backup location (for those that _can_ be backed up).
+BACKUP_LOCATION="$HOME/.rc_file_backups"
+if [ ! -d "$BACKUP_LOCATION" ]
 then
-    mkdir -p $BACKUP_LOCATION
+    mkdir -p "$BACKUP_LOCATION"
 fi
 
-# Obtain a reference to the local directory for properly (and dynamically)
-# linking the rc files later on
-path_to_script="$(readlink -f $0)"
-path_to_self="$(dirname "$path_to_script")"
-
-backup_rc_file () {
-    # @Param $1 : The path to the rc file we want to back up
-    # @Goal : Create a backup of the given rc file to $BACKUP_LOCATION
-    
-    # Check if file is in .config in a rudimentary way (will need improvements)
-    # by checking `basename $(dirname $(dirname $1))`. This works when the file
-    # is merely 1 directory deep into .config (e.g. ".config/polybar/config")
-    # but for anywhere that is not the case, will fail.
-    conf_check="$(basename $(dirname $(dirname $1)))"
-    if [[ $conf_check == ".config" ]]
+# Link loose files
+for file in $(ls -a $path_to_self)
+do
+    src="$path_to_self/$file"
+    dest="$HOME/$file"
+    if [ -f $src ]
     then
-        # We have confirmed the file in question is in a directory within
-        # .config, so we should verify first that
+        # $src is a non-directory file
+
+        # Check for existing files and symlinks
+        if [ -f "$dest" ]
+        then
+            # backup existing
+            mv "$dest" "$BACKUP_LOCATION"
+        
+        elif [ -h "$dest" ]
+        then
+            # Remove existing symlink
+            rm "$dest"
+        fi
+
+        # Make the new link
+        ln -s $src $dest 
+    fi 
+done
+
+
+# Link backgrounds to $HOME/.backgrounds
+if [ -d "$HOME/.backgrounds" ]
+then
+    # backup backgrounds dir
+    mv "$HOME/.backgrounds" "$BACKUP_LOCATION/.backgrounds"
+
+elif [ -h "$HOME/.backgrounds" ]
+    # Remove existing link
+    rm "$HOME/.backgrounds"
+fi
+# Make new link
+ln -s "$path_to_self/backgrounds" "$HOME/.backgrounds"
+
+
+# Link .config/
+for dir in $(ls $path_to_self/.config)
+do
+    src="$path_to_self/.config/$dir"
+    dest="$HOME/.config/$dir"
+    if [ -d $dest ]
+    then
+        # Exists as dir in home, make a backup
+        mv $dest $BACKUP_LOCATION
+
+    elif [ -h $dest ]
+    then
+        # destination is a symlink, we can just remove and overwrite it
+        # without harming the original file.
+        rm $dest
     fi
-
-}
-
-rc_file_linker () {
-    # @Param $1 : The file we are linking, located in this directory
-    # @Param $2 : The file we are linking TO, usually in $HOME or $HOME/.config
-    # @Return : None
-    # @Goal : The goal is to create symlinks to the files located within this 
-    # space to the appropriate location for the config in question to take 
-    # effect.
+    
+    # Make the new link
+    ln -s "$src" "$dst"
+done
 
 
+# Link binaries to /usr/local/bin
+# Note: The term "binary" is used wrong here but I'm leaving it as is
+# -- Ensure backup location exists with proper subdirs
+echo "The binaries section (line 81) requires sudo permissions to work"
+if [ ! -d $BACKUP_LOCATION/binaries ]
+then
+    mkdir -p $BACKUP_LOCATION/binaries
+fi
+# -- Iterate through the binaries
+for binary in $(ls binaries)
+do
+    src="$path_to_self/binaries/$binary"
+    dest="/usr/local/bin/$binary"
+    if [ -f "$dest" ]
+    then
+        sudo cp "$dest" "$BACKUP_LOCATION/binaries"
 
-}
+    elif [ -h "$dest" ]
+        sudo rm "$dest"
+    fi
+    sudo ln -s $path_to_self/binaries/$binary /usr/local/bin/$binary
+done
+
