@@ -34,17 +34,18 @@ do
         # $src is a non-directory file
 
         # Check for existing files and symlinks
-        if [ -f "$dest" ]
+        if [ -h "$dest" ]
+        then
+            # Remove existing symlink
+            echo -e  "$warn Found existing [$file] symlink. Removing."
+            rm "$dest"
+
+        elif [ -f "$dest" ]
         then
             # backup existing
             echo -e  "$info Found existing [$file]. Creating backup."
             mv "$dest" "$BACKUP_LOCATION"
         
-        elif [ -h "$dest" ]
-        then
-            # Remove existing symlink
-            echo -e  "$warn Found existing [$file] symlink. Removing."
-            rm "$dest"
         fi
 
         # Make the new link
@@ -55,17 +56,16 @@ done
 
 
 # Link backgrounds to $HOME/.backgrounds
-if [ -d "$HOME/.backgrounds" ]
-then
-    # backup backgrounds dir
-    echo -e  "$warn Found existing .backgrounds dir. Creating backup."
-    mv "$HOME/.backgrounds" "$BACKUP_LOCATION/.backgrounds"
-
-elif [ -h "$HOME/.backgrounds" ]
+if [ -h "$HOME/.backgrounds" ]
 then
     # Remove existing link
     echo -e  "$warn Found existing .backgrounds symlink. Removing."
     rm "$HOME/.backgrounds"
+elif [ -d "$HOME/.backgrounds" ]
+then
+    # backup backgrounds dir
+    echo -e  "$warn Found existing .backgrounds dir. Creating backup."
+    mv "$HOME/.backgrounds" "$BACKUP_LOCATION/.backgrounds"
 fi
 # Make new link
 echo -e  "$info Linking [$path_to_self/backgrounds] to [$HOME/.backgrounds]"
@@ -73,22 +73,22 @@ ln -s "$path_to_self/backgrounds" "$HOME/.backgrounds"
 
 
 # Link .config/
-for dir in $(ls "$path_to_self/.config")
+for dir in $(ls -a "$path_to_self/.config")
 do
     src="$path_to_self/.config/$dir"
     dest="$HOME/.config/$dir"
-    if [ -d "$dest" ]
-    then
-        # Exists as dir in home, make a backup
-        echo -e  "$info Found existing [.config/$dir] at [$dest]. Creating backup."
-        mv $dest $BACKUP_LOCATION
-
-    elif [ -h "$dest" ]
+    if [ -h "$dest" ]
     then
         # destination is a symlink, we can just remove and overwrite it
         # without harming the original file.
         echo -e  "$warn Found existing symlink to [.config/$dir]. Removing."
         rm "$dest"
+
+    elif [ -d "$dest" ]
+    then
+        # Exists as dir in home, make a backup
+        echo -e  "$info Found existing [.config/$dir] at [$dest]. Creating backup."
+        mv $dest $BACKUP_LOCATION
     fi
     
     # Make the new link
@@ -110,16 +110,17 @@ for binary in $(ls binaries)
 do
     src="$path_to_self/binaries/$binary"
     dest="/usr/local/bin/$binary"
-    if [ -f "$dest" ]
-    then
-        echo -e  "$info Found existing [$binary] in [$dest]. Creating backup"
-        sudo cp "$dest" "$BACKUP_LOCATION/binaries"
-
-    elif [ -h "$dest" ]
+    if [ -h "$dest" ]
     then
         echo -e  "$warn Found existing $dest symlink. Removing."
         sudo rm "$dest"
+
+    elif [ -f "$dest" ]
+    then
+        echo -e  "$info Found existing [$binary] in [$dest]. Creating backup"
+        sudo cp "$dest" "$BACKUP_LOCATION/binaries"
     fi
+    
 
     echo -e  "$info Linking [$src] to [$dest]"
     sudo ln -s $path_to_self/binaries/$binary /usr/local/bin/$binary
