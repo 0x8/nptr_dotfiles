@@ -27,6 +27,59 @@ primary = #ffc0cb
 secondary = #e60053
 alert = #bd2c40
 
+
+[colors/vaporwave]
+background = #00ccff
+background-alt = #a020ff
+foreground = #a020ff
+foreground-alt = #00ccff
+primary = #ffc0cb
+secondary = #e60053
+alert = #bd2c40
+
+
+; kalibar with vaporwave presets
+[bar/kalibar-vaporwave]
+width = 100%
+height = 17
+radius = 0.0
+fixed-center = false
+
+; color options
+background = ${colors/vaporwave.background}
+background-alt = ${colors/vaporwave.background-alt}}
+foreground = ${colors/vaporwave.foreground}
+foreground-alt = ${colors/vaporwave.foreground-alt}
+primary = ${colors/vaporwave.primary}
+secondary = ${colors/vaporwave.secondary}
+alert = ${colors/vaporwave.alert}
+
+line-size = 3
+line-color = #f00
+border-size = 1
+border-color = #00000000
+padding-left = 0
+padding-right = 2
+module-margin-left = 2
+module-margin-right = 2
+
+; Font options
+font-0 = fixed:pixelsize=10:weight=bold;1
+font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+
+; Module options (module-center omitted)
+modules-left = i3
+modules-right = filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth datte battery powermenu
+
+; Tray options
+tray-position = right
+tray-padding = 2
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+
 [bar/kalibar]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
