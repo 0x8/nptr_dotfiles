@@ -126,3 +126,20 @@ do
     sudo ln -s $path_to_self/binaries/$binary /usr/local/bin/$binary
 done
 
+
+# Fix up .tmux.conf POWERLINELOC
+powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
+if [ ! -z "$powerlineloc" ]
+then
+    # powerlineloc initially simply evaluates whether or not powerline-status
+    # is installed via pip, but won't point to the actual location. If the
+    # var is non-empty we know it exists and can fill in the rest of the path
+    powerlineloc=$powerlineloc/powerline/bindings/tmux/powerline.conf
+    sed -i "s@POWERLINELOC@""$powerlineloc""@g" $HOME/.tmux.conf
+else
+    # If we failed to find powerline, we need to disable the powerline shell 
+    # command and comment out the pointer to powerline so we don't get errors
+    # on tmux start
+    sed -i "s/run-shell/#run-shell/g" $HOME/.tmux.conf
+    sed -i "s/source POWERLINELOC/#source POWERLINELOC/g" $HOME/.tmux.conf
+fi
