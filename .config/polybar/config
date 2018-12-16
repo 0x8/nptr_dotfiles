@@ -69,7 +69,8 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 
 ; Module options (module-center omitted)
 modules-left = i3
-modules-right = filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth datte battery powermenu
+modules-center = date
+modules-right = filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth battery powermenu
 
 ; Tray options
 tray-position = right
