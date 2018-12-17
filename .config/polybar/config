@@ -26,6 +26,8 @@ foreground-alt = #00ccff
 primary = #ffc0cb
 secondary = #e60053
 alert = #bd2c40
+clear = #00000000
+
 
 
 [colors/vaporwave]
@@ -37,22 +39,43 @@ primary = #ffc0cb
 secondary = #e60053
 alert = #bd2c40
 
+; i3 color options
+label-mode-background = ${self.primary}
+label-mode-foreground = ${colors.clear}
+label-focused-background = ${self.background-alt}
+label-focused-foreground = ${self.foreground-alt}
+label-focused-underline = ${self.primary}
+label-visible-background = ${self.background-alt}
+label-visible-underline = ${self.primary}
+label-urgent-background = ${self.alert}
 
-; kalibar with vaporwave presets
-[bar/kalibar-vaporwave]
+
+[colors/grayscale]
+; Standard colors
+background = #808080
+background-alt = #404040
+foreground = #404040
+foreground-alt = #808080
+primary = #fff
+seconary = #0d0d0d
+alert = #bd2c40
+
+; i3-specific color mapping vars
+label-mode-background = #fff
+label-focused-foreground = #808080
+label-focused-background = #404040
+label-focused-underline = #fff
+label-focused-padding = 2
+
+
+[bar/kalicommon]
+; Common variables for all kali based bars
+; These variables are developed for a 15 inch laptop screen
+; so tweak as necessary.
 width = 100%
 height = 17
 radius = 0.0
 fixed-center = false
-
-; color options
-background = ${colors/vaporwave.background}
-background-alt = ${colors/vaporwave.background-alt}}
-foreground = ${colors/vaporwave.foreground}
-foreground-alt = ${colors/vaporwave.foreground-alt}
-primary = ${colors/vaporwave.primary}
-secondary = ${colors/vaporwave.secondary}
-alert = ${colors/vaporwave.alert}
 
 line-size = 3
 line-color = #f00
@@ -67,21 +90,81 @@ module-margin-right = 2
 font-0 = fixed:pixelsize=10:weight=bold;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 
-; Module options (module-center omitted)
+; Module options
 modules-left = i3
 modules-center = date
-modules-right = filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth battery powermenu
+modules-right = filesystem pulseaudio memory cpu wlan eth battery powermenu
 
 ; Tray options
-tray-position = right
+tray-postion = right
 tray-padding = 2
 
+; Cursor options
 cursor-click = pointer
 cursor-scroll = ns-resize
 
 
+[bar/kalibar-vaporwave]
+inherit = bar/kalicommon
+
+; Colors from colors/vaporwave
+background = ${colors/vaporwave.background}
+background-alt = ${colors/vaporwave.background-alt}
+foreground = ${colors/vaporwave.foreground}
+foreground-alt = ${colors/vaporwave.foreground-alt}
+primary = ${colors/vaporwave.primary}
+secondary = ${colors/vaporwave.secondary}
+alert = ${colors/vaporwave.alert}
+
+; Modules
+;modules-left = 
+modules-center = date
+;modules-right =
+
+
+[module/i3core]
+; This section defines the core variables that are common
+; across all configurations of the i3 modules
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+;pin-workspaces = true
+label-mode-padding = 2
+label-focused = %index%
+label-focused-padding = 2
+label-unfocused = %index%
+label-unfocused-padding = 2
+label-visible = %index%
+label-visible-padding = 2
+label-urgent = %index%!
+label-urgent-padding = 2
+label-separator = |
+
+
+[module/i3vw]
+; vaporwave presets for the i3 module
+inherit = module/i3core
+
+; Colors from colors/vaporwave
+label-mode-foreground = ${colors/vaporwave.label-mode-foreground}
+label-mode-background = ${colors/vaporwave.label-mode-foreground}
+label-focused-foreground = ${colors/vaporwave.label-focused-foreground}
+label-focused-background = ${colors/vaporwave.label-focused-background}
+label-focused-underline = ${colors/vaporwave.label-focused-underline}
+label-visible-background = ${colors/vaporwave.label-visible-background}
+label-visible-underline = ${colors/vaporwave.label-visible-underline}
+label-urgent-background = ${colors/vaporwave.label-urgent-background}
+
+
+[module/i3gs]
+; grayscale presets for the i3 module
+inherit = module/i3core 
+; TODO add grayscale colors / update colors/grayscale
+
 
 [bar/kalibar]
+; TODO prune? a lot of this is just copied from the example
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
 height = 17
@@ -106,10 +189,7 @@ module-margin-left = 1
 module-margin-right = 2
 
 font-0 = fixed:pixelsize=10:weight=bold;1
-;font-0 = "Source-Code-Pro-For-Powerline-Medium:fontformat=truetype:size=10:antialias=true;1"
-;font-1 = "Roboto:size=6:fontformat=truetype:weight=bold:antialias=false;0"
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-;font-2 = siji:pixelsize=10;1
 
 modules-left = bspwm i3
 modules-center = mpd
@@ -184,9 +264,11 @@ tray-padding = 2
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
+
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -196,13 +278,14 @@ format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
 format-prefix-underline = ${colors.secondary}
 
-label-layout = %layout%
+label-layout = %layout% 
 label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 2
 label-indicator-margin = 1
 label-indicator-background = ${colors.secondary}
 label-indicator-underline = ${colors.secondary}
+
 
 [module/filesystem]
 type = internal/fs
@@ -213,6 +296,7 @@ mount-0 = /
 label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground-alt}
+
 
 [module/bspwm]
 type = internal/bspwm
@@ -235,6 +319,7 @@ label-empty-padding = 2
 
 ; Separator in between workspaces
 ; label-separator = |
+
 
 [module/i3]
 type = internal/i3
@@ -288,6 +373,7 @@ icon-next = 
 label-song-maxlen = 25
 label-song-ellipsis = true
 
+
 [module/xbacklight]
 type = internal/xbacklight
 
@@ -305,26 +391,29 @@ bar-empty = ─
 bar-empty-font = 2
 bar-empty-foreground = ${colors.foreground-alt}
 
+
 [module/backlight-acpi]
 inherit = module/xbacklight
 type = internal/backlight
 card = intel_backlight
+
 
 [module/cpu]
 type = internal/cpu
 interval = 2
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #f90000
-label = %percentage:2%%
+;format-underline = #f90000
+label = CPU: %percentage:2%%
 
 [module/memory]
 type = internal/memory
 interval = 2
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #4bffdc
-label = %percentage_used%%
+;format-underline = #4bffdc
+label = MEM: %percentage_used%%
+
 
 [module/wlan]
 type = internal/network
@@ -333,7 +422,7 @@ interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
 format-connected-underline = #9f78e1
-label-connected = %essid%
+label-connected = essid: %essid%
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>
@@ -348,6 +437,7 @@ ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
 
+
 [module/eth]
 type = internal/network
 interface = eth0
@@ -356,19 +446,21 @@ interval = 3.0
 format-connected-underline = #55aa55
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
+label-connected = eth: %local_ip%
 
-format-disconnected =
+format-disconnected = eth: DISCONNECTED
+format-disconnected-underline = #ff0000
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
 
+
 [module/date]
 type = internal/date
 interval = 5
 
-date =
+date = "%D"
 date-alt = " %Y-%m-%d"
 
 time = %H:%M
@@ -376,9 +468,10 @@ time-alt = %H:%M:%S
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
+;format-underline = #0a6cf5
 
 label = %date% %time%
+
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -407,6 +500,7 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
+
 [module/alsa]
 type = internal/alsa
 
@@ -434,6 +528,7 @@ bar-volume-fill-font = 2
 bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
+
 
 [module/battery]
 type = internal/battery
