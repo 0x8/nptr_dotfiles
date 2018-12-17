@@ -29,7 +29,6 @@ alert = #bd2c40
 clear = #00000000
 
 
-
 [colors/vaporwave]
 background = #00ccff
 background-alt = #a020ff
