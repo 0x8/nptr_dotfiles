@@ -21,7 +21,7 @@ autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 
 " For Pathogen
 " Remove the leading double quote to uncomment
-"execute pathogen#infect()
+execute pathogen#infect()
 
 " hide buffers without having to write on undo changes first
 set hidden
