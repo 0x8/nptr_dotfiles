@@ -131,15 +131,30 @@ done
 powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
 if [ ! -z "$powerlineloc" ]
 then
-    # powerlineloc initially simply evaluates whether or not powerline-status
-    # is installed via pip, but won't point to the actual location. If the
-    # var is non-empty we know it exists and can fill in the rest of the path
-    powerlineloc=$powerlineloc/powerline/bindings/tmux/powerline.conf
-    sed -i "s@POWERLINELOC@""$powerlineloc""@g" $HOME/.tmux.conf
+    echo "$info Found powerline-status installed. Ensuring powerline is enabled"
+    sed -i "s/\#run-shell \"powerline/run-shell \"powerline/g" $HOME/.tmux.conf
+    sed -i "s@\#source /usr/local/lib/python@source /usr/local/lib/python@g" $HOME/.tmux.conf
 else
-    # If we failed to find powerline, we need to disable the powerline shell 
-    # command and comment out the pointer to powerline so we don't get errors
-    # on tmux start
-    sed -i "s/run-shell/#run-shell/g" $HOME/.tmux.conf
-    sed -i "s/source POWERLINELOC/#source POWERLINELOC/g" $HOME/.tmux.conf
+    echo "$warn Failed to find powerline-status, Disabling tmux powerline"
+    sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $HOME/.tmux.conf
+    sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $HOME/.tmux.conf
+fi
+
+
+# Fix up vimrc to enable vim pathogen if it is installed
+if [ -d "$HOME/.vim/autoload" ]
+then
+    # Found vim autoload dir, check for pathogen.vim
+    if [ -f "$HOME/.vim/autoload/pathogen.vim" ]
+    then
+        echo -e "$info Found vim pathogen, ensuring it is enabled in vimrc"
+        sed -i "s/\"execute path/execute path/g" $HOME/.vimrc
+    else
+        echo -e "$warn Failed to find vim pathogen. Ensuring call is commented out"
+        sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
+    fi
+else
+    # Pathogen not installed, ensure command is commented
+    echo -e "$warn Failed to find vim autoload dir, pathogen not installed"
+    sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
 fi
