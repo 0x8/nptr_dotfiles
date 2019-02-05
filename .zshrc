@@ -110,3 +110,7 @@ fi
 
 export PYTHONSTARTUP=~/.pythonrc
 
+if [ -t 1 ]
+then
+    cd
+fi

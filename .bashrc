@@ -135,4 +135,7 @@ then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
 
-
+if [ -t 1 ]
+then
+    cd
+fi
