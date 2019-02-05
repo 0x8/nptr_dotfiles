@@ -1,158 +1,160 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-######################################################
-# Set up the new dotfiles as symlinks while preserving  
-# existing configs                                      
-######################################################
+# @Ian Guibas
+# A simple installer for my dotfiles as symlinks. This installer attmepts to
+# preserve all exisitng, non-symlinked config files and directories but it is
+# far from perfect.
 
-# GLOBAL Reference to self (needed when linking)
+# Self references
 path_to_script="$(readlink -f $0)"
-path_to_self=$"$(dirname "$path_to_script")"
+path_to_self="$(dirname "$path_to_script")"
 
-#############################################
-## Check for and backup existing config items
-#############################################
-
-# Create a function to reduce redundancy and 
-# mv original config items to a safe location
-# prior to link generation
-backup_rc_file () {
-
-    # Create a stashing directory if it doesn't exist
-    if [ ! -d $HOME/.rc_file_backups ]
-    then
-        mkdir -p $HOME/.rc_file_backups
-    fi
-
-    # Define the paths we are working with
-    path="$1"
-    filename="$(basename $1)"
-    backup_location="$HOME""/.rc_file_backups/""$filename"
-    if [ -f "$1" ]
-    then
-        echo "[INFO] Backing up $1 to $backup_location"
-        mv "$1" "$backup_location"
-    fi
-}
-
-# Backup each file by providing its natural
-# path to the backup_rc_file function defined
-# above
-echo "Checking for and backing up existing dotfiles ... "
-echo "You can find these backups at the following location:"
-echo "$HOME""/.rc_file_backups"
-backup_rc_file $HOME/.aliases
-backup_rc_file $HOME/.bashrc
-backup_rc_file $HOME/.envvars
-backup_rc_file $HOME/.config/i3/config
-backup_rc_file $HOME/.config/i3status/config
-backup_rc_file $HOME/.pythonrc
-backup_rc_file $HOME/.tmux.conf
-backup_rc_file $HOME/.vimrc
-backup_rc_file $HOME/.zshrc
-backup_rc_file $HOME/.config/terminator/config
-
-# Given the name of a dotfile provided by this repo,
-# create a symlink to it in the appropriate place
-link_rc_file () {
-    
-    # Define the full path to the referenced dotfile
-    new_rc_file="$path_to_self""/""$1"
-    
-    # Check for terminator, i3config, and i3status as they are
-    # treated differently than the other config files
-    if [[ "$(basename $1)" == "i3config" ]]
-    then
-        # Check that i3's config file exists at $HOME/.config/i3
-        # in the event that the dotfiles are installed prior to i3.
-        # This should prevent the need to manually update the file later.
-        if [ ! -d $HOME/.config/i3 ]
-        then
-            mkdir -p $HOME/.config/i3
-        fi
-        link_loc="$HOME""/.config/i3/config"
-    elif [[ "$(basename $1)" == "i3status" ]]
-    then
-        # Check that .config/i3status/ exists and
-        # create it if not. This is because for some
-        # reason or another, it tends to not be a
-        # default folder but i3status looks here for
-        # userspace extensions
-        if [ ! -d "$HOME/.config/i3status" ]
-        then
-            echo "Creating i3status config folder ... "
-            mkdir -p "$HOME/.config/i3status" 
-        fi
-        
-        # Set the link location
-        link_loc="$HOME""/.config/i3status/config"
-    elif [[ "$(basename $1)" == "terminator_config" ]]
-    then
-        # like i3_config, terminator_config exists within a subfolder
-        # of .config, $HOME/.config/terminator/ as the file "config".
-        # overall it works the same as i3_config so this is just an
-        # adaptation of that
-        if [ ! -d $HOME/.config/terminator ]
-        then
-            mkdir -p $HOME/.config/terminator
-        fi
-        link_loc="$HOME""/.config/terminator/config"
-    else
-        link_loc="$HOME""/""$1"
-    fi
-
-    # Generate the symlink
-    # (ln -s TARGET LINK_NAME)
-    echo "[INFO] Linking $link_loc to $new_rc_file"
-    ln -s $new_rc_file $link_loc
-}
-
-# Create the symlink for each file
-echo "Creating links to dotfiles ... "
-link_rc_file .aliases
-link_rc_file .bashrc
-link_rc_file .envvars
-link_rc_file i3config
-link_rc_file i3status
-link_rc_file .pythonrc
-link_rc_file .tmux.conf
-link_rc_file .vimrc
-link_rc_file .zshrc
-link_rc_file terminator_config
-
-# Copy the vmbg.jpg file to the Downloads folder.
-# This shouldn't cause an issue but we will check
-# for the 1 in a trillion chance of collision and
-# make a backup.
-if [ -f "$HOME/Downloads/vwbg.jpg" ]
+# User-defineable rc file backup location (for those that _can_ be backed up).
+BACKUP_LOCATION="$HOME/.rc_file_backups"
+if [ ! -d "$BACKUP_LOCATION" ]
 then
-    mv "$HOME/Downloads/vwbg.jpg" "$HOME/Downloads/vwbg_backup.jpg"
+    mkdir -p "$BACKUP_LOCATION"
 fi
-# Copy the file
-cp "$path_to_self""/vwbg.jpg" "$HOME""/Downloads/vwbg.jpg"
 
-# "Install" i3exit by copying the executable script into /usr/bin
-echo "Linking i3exit into /usr/bin ... "
-echo "This will require sudo access"
-echo "Please review the script if you do not trust this operation"
-echo "You are looking for line 126"
-sudo ln -s "$path_to_self/i3exit" /usr/bin/i3exit
+# LOGGING TAGS
+info="\x1b[1;37m[INFO]\x1b[0m"
+warn="\x1b[1;35m[WARN]\x1b[0m"
+error="\x1b[1;31m[ERROR]\x1b[0m"
+
+echo -e  "$info Started dotfile installer."
+echo -e  "$info Backups can be found at $BACKUP_LOCATION"
+
+# Link loose files
+for file in $(ls -a $path_to_self)
+do
+    src="$path_to_self/$file"
+    dest="$HOME/$file"
+    if [ -f $src ]
+    then
+        # $src is a non-directory file
+
+        # Check for existing files and symlinks
+        if [ -h "$dest" ]
+        then
+            # Remove existing symlink
+            echo -e  "$warn Found existing [$file] symlink. Removing."
+            rm "$dest"
+
+        elif [ -f "$dest" ]
+        then
+            # backup existing
+            echo -e  "$info Found existing [$file]. Creating backup."
+            mv "$dest" "$BACKUP_LOCATION"
+        
+        fi
+
+        # Make the new link
+        echo -e  "$info Linking [$src] to [$dest]"
+        ln -s $src $dest 
+    fi 
+done
+
+
+# Link backgrounds to $HOME/.backgrounds
+if [ -h "$HOME/.backgrounds" ]
+then
+    # Remove existing link
+    echo -e  "$warn Found existing .backgrounds symlink. Removing."
+    rm "$HOME/.backgrounds"
+elif [ -d "$HOME/.backgrounds" ]
+then
+    # backup backgrounds dir
+    echo -e  "$warn Found existing .backgrounds dir. Creating backup."
+    mv "$HOME/.backgrounds" "$BACKUP_LOCATION/.backgrounds"
+fi
+# Make new link
+echo -e  "$info Linking [$path_to_self/backgrounds] to [$HOME/.backgrounds]"
+ln -s "$path_to_self/backgrounds" "$HOME/.backgrounds"
+
+
+# Link .config/
+for dir in $(ls -a "$path_to_self/.config")
+do
+    src="$path_to_self/.config/$dir"
+    dest="$HOME/.config/$dir"
+    if [ -h "$dest" ]
+    then
+        # destination is a symlink, we can just remove and overwrite it
+        # without harming the original file.
+        echo -e  "$warn Found existing symlink to [.config/$dir]. Removing."
+        rm "$dest"
+
+    elif [ -d "$dest" ]
+    then
+        # Exists as dir in home, make a backup
+        echo -e  "$info Found existing [.config/$dir] at [$dest]. Creating backup."
+        mv $dest $BACKUP_LOCATION
+    fi
+    
+    # Make the new link
+    echo -e  "$info Linking [$src] to [$dest]"
+    ln -s "$src" "$dest"
+done
+
+
+# Link binaries to /usr/local/bin
+# Note: The term "binary" is used wrong here but I'm leaving it as is
+# -- Ensure backup location exists with proper subdirs
+if [ ! -d $BACKUP_LOCATION/binaries ]
+then
+    echo -e  "$info Did not find a backup subdirectory for binaries. Creating one."
+    mkdir -p $BACKUP_LOCATION/binaries
+fi
+# -- Iterate through the binaries
+for binary in $(ls binaries)
+do
+    src="$path_to_self/binaries/$binary"
+    dest="/usr/local/bin/$binary"
+    if [ -h "$dest" ]
+    then
+        echo -e  "$warn Found existing $dest symlink. Removing."
+        sudo rm "$dest"
+
+    elif [ -f "$dest" ]
+    then
+        echo -e  "$info Found existing [$binary] in [$dest]. Creating backup"
+        sudo cp "$dest" "$BACKUP_LOCATION/binaries"
+    fi
+    
+
+    echo -e  "$info Linking [$src] to [$dest]"
+    sudo ln -s $path_to_self/binaries/$binary /usr/local/bin/$binary
+done
+
 
 # Fix up .tmux.conf POWERLINELOC
 powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
 if [ ! -z "$powerlineloc" ]
 then
-    # powerlineloc initially simply evaluates whether or not powerline-status
-    # is installed via pip, but won't point to the actual location. If the
-    # var is non-empty we know it exists and can fill in the rest of the path
-    powerlineloc=$powerlineloc/powerline/bindings/tmux/powerline.conf
-    sed -i "s@POWERLINELOC@""$powerlineloc""@g" $HOME/.tmux.conf
+    echo "$info Found powerline-status installed. Ensuring powerline is enabled"
+    sed -i "s/\#run-shell \"powerline/run-shell \"powerline/g" $HOME/.tmux.conf
+    sed -i "s@\#source /usr/local/lib/python@source /usr/local/lib/python@g" $HOME/.tmux.conf
 else
-    # If we failed to find powerline, we need to disable the powerline shell 
-    # command and comment out the pointer to powerline so we don't get errors
-    # on tmux start
-    sed -i "s/run-shell/#run-shell/g" $HOME/.tmux.conf
-    sed -i "s/source POWERLINELOC/#source POWERLINELOC/g" $HOME/.tmux.conf
+    echo "$warn Failed to find powerline-status, Disabling tmux powerline"
+    sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $HOME/.tmux.conf
+    sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $HOME/.tmux.conf
 fi
 
 
+# Fix up vimrc to enable vim pathogen if it is installed
+if [ -d "$HOME/.vim/autoload" ]
+then
+    # Found vim autoload dir, check for pathogen.vim
+    if [ -f "$HOME/.vim/autoload/pathogen.vim" ]
+    then
+        echo -e "$info Found vim pathogen, ensuring it is enabled in vimrc"
+        sed -i "s/\"execute path/execute path/g" $HOME/.vimrc
+    else
+        echo -e "$warn Failed to find vim pathogen. Ensuring call is commented out"
+        sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
+    fi
+else
+    # Pathogen not installed, ensure command is commented
+    echo -e "$warn Failed to find vim autoload dir, pathogen not installed"
+    sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
+fi
