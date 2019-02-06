@@ -135,7 +135,7 @@ then
     sed -i "s/\#run-shell \"powerline/run-shell \"powerline/g" $HOME/.tmux.conf
     sed -i "s@\#source /usr/local/lib/python@source /usr/local/lib/python@g" $HOME/.tmux.conf
 else
-    echo "$warn Failed to find powerline-status, Disabling tmux powerline"
+    echo -e "$warn Failed to find powerline-status, Disabling tmux powerline"
     sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $HOME/.tmux.conf
     sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $HOME/.tmux.conf
 fi
