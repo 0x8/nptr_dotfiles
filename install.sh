@@ -131,7 +131,7 @@ done
 powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
 if [ ! -z "$powerlineloc" ]
 then
-    echo "$info Found powerline-status installed. Ensuring powerline is enabled"
+    echo -e "$info Found powerline-status installed. Ensuring powerline is enabled"
     sed -i "s/\#run-shell \"powerline/run-shell \"powerline/g" $HOME/.tmux.conf
     sed -i "s@\#source /usr/local/lib/python@source /usr/local/lib/python@g" $HOME/.tmux.conf
 else
