@@ -59,6 +59,9 @@ if [ -f "$HOME/.dircolors/dircolors.ansi-dark" ]
 then
     eval `dircolors "$HOME/.dircolors/dircolors.ansi-dark"`
 fi
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+autoload -Uz compinit
+compinit
  
 # Fix the home issue when launching bash for WSL via terminator 
 if [ -t 1 ]
