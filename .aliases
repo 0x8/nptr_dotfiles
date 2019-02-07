@@ -14,7 +14,6 @@ alias xcore='gdb -q -batch -c $1'
 alias pip-upgrade-all='pip freeze --local | grep -v "^\-e" | cut -d = -f 1  | sudo xargs -n1 pip install -U'
 alias pip2-upgrade-all='pip2 freeze --local | grep -v "^\-e" | cut -d = -f 1  | sudo xargs -n1 pip2 install -U'
 alias vi=vim
-alias arm-linux-gnueabi-gcc="arm-linux-gnueabi-gcc"
 
 ##Directories
 alias la='ls -la'
