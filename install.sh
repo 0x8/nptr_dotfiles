@@ -136,31 +136,61 @@ done
 powerlineloc="$(pip show powerline-status | grep Location | cut -d" " -f2)"
 if [ ! -z "$powerlineloc" ]
 then
+    
+    # Update powerline loc with the full path to the tmux conf
+    powerlineloc="$powerlineloc/powerline/bindings/tmux/powerline.conf"
+
+    # Assuming the link has been changed elsewhere, sed requires the path
+    # to the link target itself (it will overwrite the link without this)
+    # so it can edit the target.
+    if [ -h "$HOME/.tmux.conf" ]
+    then
+        TMUX_CONF="$(readlink -f $HOME/.tmux.conf)"
+    else
+        if [ -f "$HOME/.tmux.conf" ]
+        then
+            TMUX_CONF="$HOME/.tmux.conf"
+        fi
+    fi
+
     echo -e "$info Found powerline-status installed. Ensuring powerline is enabled"
-    sed -i "s/\#run-shell \"powerline/run-shell \"powerline/g" $HOME/.tmux.conf
-    sed -i "s@\#source /usr/local/lib/python@source /usr/local/lib/python@g" $HOME/.tmux.conf
+    sed -i "s@\#run-shell \"powerline@run-shell \"powerline@g" $TMUX_CONF
+    sed -i "s@\#source POWERLINELOC@source "$powerlineloc"@g" $TMUX_CONF
 else
     echo -e "$warn Failed to find powerline-status, Disabling tmux powerline"
-    sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $HOME/.tmux.conf
-    sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $HOME/.tmux.conf
+    sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $TMUX_CONF
+    sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $TMUX_CONF
 fi
+
 
 # Fix up vimrc to enable vim pathogen if it is installed
 if [ -d "$HOME/.vim/autoload" ]
 then
+
+    # Grab real path to vimrc for sed
+    if [ -h "$HOME/.vimrc" ]
+    then
+        VIMRC="$(readlink -f $HOME/.vimrc)"
+    else
+        if [ -f "$HOME/.vimrc" ]
+        then
+            VIMRC="$HOME/.vimrc"
+        fi
+    fi
+
     # Found vim autoload dir, check for pathogen.vim
     if [ -f "$HOME/.vim/autoload/pathogen.vim" ]
     then
         echo -e "$info Found vim pathogen, ensuring it is enabled in vimrc"
-        sed -i "s/\"execute path/execute path/g" $HOME/.vimrc
+        sed -i "s/\"execute path/execute path/g" $VIMRC
     else
         echo -e "$warn Failed to find vim pathogen. Ensuring call is commented out"
-        sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
+        sed -i "s/^execute path/\"execute path/g" $VIMRC
     fi
 else
     # Pathogen not installed, ensure command is commented
     echo -e "$warn Failed to find vim autoload dir, pathogen not installed"
-    sed -i "s/^execute path/\"execute path/g" $HOME/.vimrc
+    sed -i "s/^execute path/\"execute path/g" $VIMRC
 fi
 
 
@@ -176,7 +206,7 @@ fi
 echo -e "$info Writing new .gitconfig based on environment."
 echo "[User]" >> "$GCONF"
 echo "    name = $USER" >> "$GCONF"
-echo "    email = $USER@$HOST" >> "$GCONF"
+echo "    email = ""$USER""@""$HOST" >> "$GCONF"
 echo "[Core]" >> "$GCONF"
 echo "    editor = vim" >> "$GCONF"
 
