@@ -29,29 +29,34 @@ for file in $(ls -a $path_to_self)
 do
     src="$path_to_self/$file"
     dest="$HOME/$file"
-    if [ -f $src ]
+    if [[ $file == "install.sh" ]]
     then
-        # $src is a non-directory file
-
-        # Check for existing files and symlinks
-        if [ -h "$dest" ]
+        echo -e "$info Skipping install script."
+    else
+        if [ -f $src ]
         then
-            # Remove existing symlink
-            echo -e  "$warn Found existing [$file] symlink. Removing."
-            rm "$dest"
+            # $src is a non-directory file
 
-        elif [ -f "$dest" ]
-        then
-            # backup existing
-            echo -e  "$info Found existing [$file]. Creating backup."
-            mv "$dest" "$BACKUP_LOCATION"
-        
-        fi
+            # Check for existing files and symlinks
+            if [ -h "$dest" ]
+            then
+                # Remove existing symlink
+                echo -e  "$warn Found existing [$file] symlink. Removing."
+                rm "$dest"
 
-        # Make the new link
-        echo -e  "$info Linking [$src] to [$dest]"
-        ln -s $src $dest 
-    fi 
+            elif [ -f "$dest" ]
+            then
+                # backup existing
+                echo -e  "$info Found existing [$file]. Creating backup."
+                mv "$dest" "$BACKUP_LOCATION"
+            
+            fi
+
+            # Make the new link
+            echo -e  "$info Linking [$src] to [$dest]"
+            ln -s $src $dest 
+        fi 
+    fi
 done
 
 
@@ -139,7 +144,6 @@ else
     sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $HOME/.tmux.conf
     sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $HOME/.tmux.conf
 fi
-
 
 # Fix up vimrc to enable vim pathogen if it is installed
 if [ -d "$HOME/.vim/autoload" ]
