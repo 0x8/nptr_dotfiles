@@ -165,9 +165,11 @@ GCONF="$HOME/.gitconfig"
 if [ -e "$HOME/.gitconfig" ] # Handle existing config
 then
     # Make a backup of the existing config
+    echo -e "$info Found existing .gitconfig, backing it up."
     mv "$HOME/.gitconfig" "$BACKUP_LOCATION/.gitconfig_backup"
 fi
 # Now can write the new file
+echo -e "$info Writing new .gitconfig based on environment."
 echo "[User]" >> "$GCONF"
 echo "    name = $USER" >> "$GCONF"
 echo "    email = $USER@$HOST" >> "$GCONF"
