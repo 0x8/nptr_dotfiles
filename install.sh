@@ -133,7 +133,7 @@ done
 
 
 # Fix up .tmux.conf POWERLINELOC
-powerlineloc=$(pip show powerline-status | grep Location | cut -d" " -f2)
+powerlineloc="$(pip show powerline-status | grep Location | cut -d" " -f2)"
 if [ ! -z "$powerlineloc" ]
 then
     echo -e "$info Found powerline-status installed. Ensuring powerline is enabled"
