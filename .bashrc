@@ -136,9 +136,9 @@ then
 fi
 
 # Fix dir_colors based on https://github.com/seebi/dircolors-solarized
-if [ -f "$HOME/.dircolors/ansi-dark" ]
+if [ -f "$HOME/.dircolors/dircolors.ansi-dark" ]
 then
-    eval `dircolors "$HOME/.dircolors/ansi-dark"`
+    eval `dircolors "$HOME/.dircolors/dircolors.ansi-dark"`
 fi
 
 if [ -t 1 ]
