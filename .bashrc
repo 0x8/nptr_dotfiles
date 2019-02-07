@@ -135,6 +135,12 @@ then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
 
+# Fix dir_colors based on https://github.com/seebi/dircolors-solarized
+if [ -f "$HOME/.dircolors/ansi-dark" ]
+then
+    eval `dircolors "$HOME/.dircolors/ansi-dark"`
+fi
+
 if [ -t 1 ]
 then
     cd

@@ -110,6 +110,13 @@ fi
 
 export PYTHONSTARTUP=~/.pythonrc
 
+# Fix dir_colors based on https://github.com/seebi/dircolors-solarized
+if [ -f "$HOME/.dircolors/ansi-dark" ]
+then
+    eval `dircolors "$HOME/.dircolors/ansi-dark"`
+fi
+ 
+# Fix the home issue when launching bash for WSL via terminator 
 if [ -t 1 ]
 then
     cd
