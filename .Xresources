@@ -111,3 +111,22 @@ URxvt.colorIT:      #87af5f
 URxvt.colorBD:      #d7d7d7
 URxvt.colorUL:      #87afd7
 
+! Perl extensions
+URxvt.perl-ext-common: default,matcher,clipboard,resize-font
+
+! Launching URLs
+URxvt.url-launcher:         /usr/bin/xdg-open
+URxvt.matcher.button:       1
+! Launching via keyboard
+URxvt.keysym.C-Delete:      perl:matcher:last
+URxvt.keysym.M-Delete: perl:matcher:list
+
+! Cursor
+URxvt.cursorBlink:          true
+URxvt.cursorColor:          S_base00
+URxvt.cursorUnderline:      false
+
+! Copy Paste
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.iso14755: False
+
