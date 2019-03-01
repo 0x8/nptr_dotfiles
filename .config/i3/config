@@ -180,12 +180,12 @@ bindsym $mod+r mode "resize"
 bar {
     colors {
         background "#00ccff"
-        statusline "#ff99cc"
+        statusline "#7f2da8"
         separator  "#000000"
     }
 
 	position top
-	font pango:monospace 10px
+	font pango:monospace bold 11px
         status_command i3status
 	separator_symbol ":|:"
 }
@@ -209,7 +209,7 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-exec --no-startup-id feh --bg-scale $HOME/Downloads/vwbg.jpg
+exec --no-startup-id feh --bg-scale ~/.backgrounds/vwbg.jpg
 # Lock with $mod+L
 bindsym $mod+l exec --no-startup-id i3lock -i /home/nullp0inter/Documents/Wallpapers/ghost-ethereal-papa-lock.png -c 000000
 
