@@ -33,6 +33,21 @@ do
     then
         echo -e "$info Skipping install script."
     else
+        if [ -d $src ] && [[ $file == ".urxvt" ]]
+        then
+            if [ -h "$dest" ]
+            then   
+                echo -e "$warn Found existing symlink for [$file]. Removing."
+                rm "$dest"
+            elif [ -d "$dest" ]
+            then
+                echo -e "$warn Found existing [$file]. Creating backup."
+                mv "$dest" "$BACKUP_LOCATION"
+            fi
+
+            echo -e "$info Linking [$src] to [$dest]"
+            ln -s $src $dest
+        fi
         if [ -f $src ]
         then
             # $src is a non-directory file
