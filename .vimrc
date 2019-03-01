@@ -21,7 +21,10 @@ autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 
 " For Pathogen
 " Remove the leading double quote to uncomment
-"execute pathogen#infect()
+execute pathogen#infect()
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
 
 " hide buffers without having to write on undo changes first
 set hidden
