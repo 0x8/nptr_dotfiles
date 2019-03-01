@@ -112,7 +112,7 @@ URxvt.colorBD:      #d7d7d7
 URxvt.colorUL:      #87afd7
 
 ! Perl extensions
-URxvt.perl-ext-common: default,matcher,clipboard,resize-font
+URxvt.perl-ext-common: default,matcher,clipboard,resize-font,keyboard-select
 
 ! Launching URLs
 URxvt.perl-ext: default,url-select
