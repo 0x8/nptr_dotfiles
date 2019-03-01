@@ -3,9 +3,12 @@ set show_hidden
 set show_hidden true
 ?
 help config
-
 preview
 set preview_images_method urxvt-full
 set preview_images true
 set preview_images_method urxvt
 find b
+search home
+/home
+
+!cd
