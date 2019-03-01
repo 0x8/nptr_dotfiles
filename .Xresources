@@ -131,6 +131,8 @@ URxvt.cursorColor:          S_base00
 URxvt.cursorUnderline:      false
 
 ! Copy Paste
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+#URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.keysym.C-A-C: perl:clipboard:copy
+URxvt.keysym.C-A-V: perl:clipboard:paste_escaped
 URxvt.iso14755: False
 
