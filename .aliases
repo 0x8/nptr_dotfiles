@@ -1,13 +1,3 @@
-## NOT ALIASES
-# Obviously these are not aliases
-# They are auto shit
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent > ~/.ssh-agent-thing
-fi
-if [[ "$SSH_AGENT_PID" == "" ]]; then
-    eval "$(<~/.ssh-agent-thing)"
-fi
-
 ##UTILITY
 alias q='exit'
 alias xcore='gdb -q -batch -c $1'
