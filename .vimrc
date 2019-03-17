@@ -69,3 +69,6 @@ set undolevels=1000             " use many muchos levels of undo
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set title                       " change the terminal's title
 set ls=2                         "Show filename at bottom
+
+" Set Colorscheme from https://github.com/flazz/vim-colorschemes
+colorscheme solarized8_dark
