@@ -8,7 +8,7 @@ Xft.hinting:                true
 
 URxvt*font: xft:Source Code Pro Medium:pixelsize=13:antialias=true:hinting=true,xft:Source Code Pro Medium:pixelsize=13:antialias=true:hinting=true
 
-!URxvt.transparent: True
+!URxvt.transparent: False
 !URxvt.shading: 90
 !URxvt.tintColor: #00ccff
 !URxvt.background: #00ccff
