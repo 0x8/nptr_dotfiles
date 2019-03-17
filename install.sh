@@ -39,11 +39,11 @@ do
         then
             if [ -h "$dest" ]
             then   
-                echo -e "$warn Found existing symlink for [$file]. Removing."
+                echo -e "$warn [42] Found existing symlink for [$file]. Removing."
                 rm -r "$dest"
             elif [ -d "$dest" ]
             then
-                echo -e "$warn Found existing [$file]. Creating backup."
+                echo -e "$warn [46] Found existing [$file]. Creating backup."
                 mv "$dest" "$BACKUP_LOCATION"
             fi
 
@@ -56,11 +56,11 @@ do
         then
             if [ -h "$dest" ]
             then
-                echo -e "$warn Found existing symlink for [$file]. Removing"
+                echo -e "$warn [59] Found existing symlink for [$file]. Removing"
                 rm -r "$dest"
             elif [ -d "$dest" ]
             then
-                echo -e "$warn Found existing [$file]. Creating backup."
+                echo -e "$warn [63] Found existing [$file]. Creating backup."
                 mv "$dest" "$BACKUP_LOCATION"
             fi
 
@@ -77,13 +77,13 @@ do
             if [ -h "$dest" ]
             then
                 # Remove existing symlink
-                echo -e  "$warn Found existing [$file] symlink. Removing."
+                echo -e  "$warn [80] Found existing [$file] symlink. Removing."
                 rm "$dest"
 
             elif [ -f "$dest" ]
             then
                 # backup existing
-                echo -e  "$info Found existing [$file]. Creating backup."
+                echo -e  "$info [86] Found existing [$file]. Creating backup."
                 mv "$dest" "$BACKUP_LOCATION"
             
             fi
@@ -118,17 +118,21 @@ for dir in $(ls -a "$path_to_self/.config")
 do
     src="$path_to_self/.config/$dir"
     dest="$HOME/.config/$dir"
+    if [ "$dir" = '..' -o "$dir" = '.' ]
+    then
+        echo -e "$info dir was either '.' or '..', skipping. dir: [$dir]"
+        continue
+    fi
     if [ -h "$dest" ]
     then
         # destination is a symlink, we can just remove and overwrite it
         # without harming the original file.
-        echo -e  "$warn Found existing symlink to [.config/$dir]. Removing."
+        echo -e  "$warn [125] Found existing symlink to [.config/$dir]. Removing."
         rm "$dest"
-
     elif [ -d "$dest" ]
     then
         # Exists as dir in home, make a backup
-        echo -e  "$info Found existing [.config/$dir] at [$dest]. Creating backup."
+        echo -e  "$info [131] Found existing [.config/$dir] at [$dest]. Creating backup."
         mv $dest $BACKUP_LOCATION
     fi
     
@@ -153,7 +157,7 @@ do
     dest="/usr/local/bin/$binary"
     if [ -h "$dest" ]
     then
-        echo -e  "$warn Found existing $dest symlink. Removing."
+        echo -e  "$warn [160] Found existing $dest symlink. Removing."
         sudo rm "$dest"
 
     elif [ -f "$dest" ]
@@ -169,7 +173,7 @@ done
 
 
 # Fix up .tmux.conf POWERLINELOC
-powerlineloc="$(pip show powerline-status | grep Location | cut -d" " -f2)"
+powerlineloc="$(pip3 show powerline-status | grep Location | cut -d" " -f2)"
 if [ ! -z "$powerlineloc" ]
 then
     
@@ -193,7 +197,7 @@ then
     sed -i "s@\#run-shell \"powerline@run-shell \"powerline@g" $TMUX_CONF
     sed -i "s@\#source POWERLINELOC@source "$powerlineloc"@g" $TMUX_CONF
 else
-    echo -e "$warn Failed to find powerline-status, Disabling tmux powerline"
+    echo -e "$warn [200] Failed to find powerline-status, Disabling tmux powerline"
     sed -i "s/run-shell \"powerline/\#run-shell \"powerline/g" $TMUX_CONF
     sed -i "s@source /usr/local/lib/python@\#source /usr/local/lib/python@g" $TMUX_CONF
 fi
@@ -220,12 +224,12 @@ then
         echo -e "$info Found vim pathogen, ensuring it is enabled in vimrc"
         sed -i "s/\"execute path/execute path/g" $VIMRC
     else
-        echo -e "$warn Failed to find vim pathogen. Ensuring call is commented out"
+        echo -e "$warn [227] Failed to find vim pathogen. Ensuring call is commented out"
         sed -i "s/^execute path/\"execute path/g" $VIMRC
     fi
 else
     # Pathogen not installed, ensure command is commented
-    echo -e "$warn Failed to find vim autoload dir, pathogen not installed"
+    echo -e "$warn [232] Failed to find vim autoload dir, pathogen not installed"
     sed -i "s/^execute path/\"execute path/g" $VIMRC
 fi
 
