@@ -3,3 +3,6 @@ export FLASK_APP=app.py
 # Bootstrap Studio fix
 # Adds /opt/bootstrapstudio to the path
 export PATH="$PATH"":/opt/bootstrapstudio"
+# Install Ruby Gems to ~/gems
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
