@@ -1,1 +1,5 @@
 export FLASK_APP=app.py
+
+# Bootstrap Studio fix
+# Adds /opt/bootstrapstudio to the path
+export PATH="$PATH"":/opt/bootstrapstudio"
