@@ -51,7 +51,12 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git tmux sudo)
+
+# Tmux plugin options
+ZSH_TMUX_FIXTERM=true
+ZSH_TMUX_AUTOCONNECT=false
+ZSH_TMUX_AUTOSTART=true
 
 source $ZSH/oh-my-zsh.sh
 
@@ -107,6 +112,10 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]
 then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
+
+# Bootstrap Studio
+# Add /opt/bootstrapstudio to the path 
+PATH="$PATH"":/opt/bootstrapstudio"
 
 export PYTHONSTARTUP=~/.pythonrc
 
