@@ -29,16 +29,18 @@ for file in $(ls -a $path_to_self)
 do
     src="$path_to_self/$file"
     dest="$HOME/$file"
-    if [[ $file == "install.sh" ]]
+    if [ $file = "install.sh" ]
     then
         echo -e "$info Skipping install script."
     else
-        if [ -d $src ] && [[ $file == ".urxvt" ]]
+        
+        # .urxvt dir for term config stuff
+        if [ -d $src -a $file = ".urxvt" ]
         then
             if [ -h "$dest" ]
             then   
                 echo -e "$warn Found existing symlink for [$file]. Removing."
-                rm "$dest"
+                rm -r "$dest"
             elif [ -d "$dest" ]
             then
                 echo -e "$warn Found existing [$file]. Creating backup."
@@ -48,6 +50,25 @@ do
             echo -e "$info Linking [$src] to [$dest]"
             ln -s $src $dest
         fi
+        
+        # .vim dir
+        if [ -d $src -a $file = ".vim" ]
+        then
+            if [ -h "$dest" ]
+            then
+                echo -e "$warn Found existing symlink for [$file]. Removing"
+                rm -r "$dest"
+            elif [ -d "$dest" ]
+            then
+                echo -e "$warn Found existing [$file]. Creating backup."
+                mv "$dest" "$BACKUP_LOCATION"
+            fi
+
+            echo -e "$info Linking [$src] to [$dest]"
+            ln -s $src $dest
+        fi
+
+        # Every other file/non-directory in the root
         if [ -f $src ]
         then
             # $src is a non-directory file
