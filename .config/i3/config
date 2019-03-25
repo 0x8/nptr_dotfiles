@@ -226,4 +226,7 @@ for_window [class="^.*"] border pixel 1
 gaps inner 10
 
 # Compton compositor
-exec --no-startup-id compton
+#exec --no-startup-id compton
+
+# Xresources fix
+exec --no-startup-id xrdb -merge ~/.Xresources
