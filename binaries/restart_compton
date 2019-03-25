@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Restart's the compton compositor as needed to reload changes
+# to .config/compton.conf, primarily useful for fixing transparency
+# settings on new programs without the need to restart.
+
+# Kill existing compton instance
+pkill compton
+
+# Restart it
+compton

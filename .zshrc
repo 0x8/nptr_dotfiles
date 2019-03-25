@@ -119,3 +119,4 @@ PATH="$PATH"":/opt/bootstrapstudio"
 
 export PYTHONSTARTUP=~/.pythonrc
 
+ulimit -c unlimited
