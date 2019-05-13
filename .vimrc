@@ -61,7 +61,7 @@ set ignorecase                  " ignore case when searching
 set smartcase                   " ignore case if search pattern is all lowercase,
                                 "    case-sensitive otherwise
 set scrolloff=4                 " keep 4 lines off the edges of the screen when scrolling
-set virtualedit=all             " allow the cursor to go in to \"invalid\" places
+"set virtualedit=all             " allow the cursor to go in to \"invalid\" places
 
 set hlsearch                    " highlight search terms
 set incsearch                   " show search matches as you type
@@ -102,6 +102,16 @@ au BufNewFile,BufRead *.js,*.html,*.css
 
 " Mark extraneous whitespace in py files
 highlight BadWhitespace ctermbg=red guibg=darkred      
-au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /\s\+$/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.cpp match BadWhitespace /\s\+$/
+
+" Fixups for virtualenv (EXPERIMENTAL)
+py3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+    project_base_dir = os.environ['VIRTUAL_ENV']
+    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    execfile(activate_this, dict(__file__=activate_this))
+EOF
 
 
