@@ -217,7 +217,8 @@ bindsym XF86AudioPrev exec playerctl previous
 
 exec --no-startup-id feh --bg-scale ~/.backgrounds/vwbg.jpg
 # Lock with $mod+L
-bindsym Mod1+l exec --no-startup-id i3lock -i ~/.backgrounds/bg-lock-outrun.png
+#bindsym Mod1+l exec --no-startup-id i3lock -i ~/.backgrounds/bg-lock-outrun.png
+bindsym Mod1+l exec --no-startup-id i3lock -c 2f2f2f
 
 new_window pixel 0
 
